@@ -11,3 +11,4 @@ Por ejemplo: Microservicios -> Doctor -> Su microservicio
 
 Cuando esté hecho su microservicio para guardarlo en github tienen que ponerle un nombre al commit en Github Desktop y darle a commit.
 
+Cuando hagan el commit les va a salir
