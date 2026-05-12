@@ -5,4 +5,4 @@
 
 //nombre de la carpeta de donde se inicia
 
-.\mvnw spring-boot:run
+cd Reembolsos_completo
