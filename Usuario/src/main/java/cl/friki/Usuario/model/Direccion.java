@@ -35,8 +35,4 @@ public class Direccion {
     @Column(nullable = false)
     private String region;
 
-    @OneToOne
-    @JoinColumn(name="usuario_id")
-    private Usuario usuario;
-
 }

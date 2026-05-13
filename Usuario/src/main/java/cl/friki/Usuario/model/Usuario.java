@@ -33,10 +33,10 @@ public class Usuario {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private String rol;
-
     @OneToOne
     @JoinColumn(name = "direccion_id", nullable = false)
     private Direccion direccion;
+
+    @Column(name = "rol_id", nullable = false)
+    private Integer idRol;
 }

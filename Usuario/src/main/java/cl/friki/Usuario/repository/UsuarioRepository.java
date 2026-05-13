@@ -1,5 +1,6 @@
 package cl.friki.Usuario.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,5 +12,7 @@ import cl.friki.Usuario.model.Usuario;
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer>{
 
     Optional<Usuario> findById(String id);
+
+    List<Usuario> findByidRol(Integer idRol);
 
 }

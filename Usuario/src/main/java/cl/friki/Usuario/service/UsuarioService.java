@@ -25,11 +25,7 @@ public class UsuarioService {
     }
     
     //crear usuario
-    public Usuario agregarUsuario(Usuario usuario){
-        if(usuario.getDireccion()!= null){
-            usuario.getDireccion().setUsuario(usuario);
-        }
-
+    public Usuario crearUsuario(Usuario usuario){
         return usuarioRepository.save(usuario);
     }
 
@@ -40,12 +36,7 @@ public class UsuarioService {
         usuarioAnt.setNombreUsuario(usuarioActualizado.getNombreUsuario());
         usuarioAnt.setPassword(usuarioActualizado.getPassword());
         usuarioAnt.setCorreo(usuarioActualizado.getCorreo());
-        usuarioAnt.setRol(usuarioActualizado.getRol());
-
-        if(usuarioActualizado.getDireccion()!=null){
-            usuarioActualizado.getDireccion().setUsuario(usuarioAnt);
-            usuarioAnt.setDireccion(usuarioActualizado.getDireccion());
-        }
+        usuarioAnt.setDireccion(usuarioActualizado.getDireccion());
 
         return usuarioRepository.save(usuarioAnt);
     }

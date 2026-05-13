@@ -50,7 +50,7 @@ public class UsuarioController {
     //crear usuario nuevo
     @PostMapping
     public ResponseEntity<Usuario> guardar(@RequestBody Usuario usuario){
-        return ResponseEntity.ok(service.agregarUsuario(usuario));
+        return ResponseEntity.ok(service.crearUsuario(usuario));
     }
 
     //eliminar usuario
@@ -84,7 +84,6 @@ public class UsuarioController {
 
             dto.setId(usuario.getId());
             dto.setNombreUsuario(usuario.getNombreUsuario());
-            dto.setRol(usuario.getRol());
             dto.setDireccion(usuario.getDireccion().getCalle());
 
             return ResponseEntity.ok(dto);
