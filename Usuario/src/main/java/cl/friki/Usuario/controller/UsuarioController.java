@@ -1,6 +1,7 @@
 package cl.friki.Usuario.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import cl.friki.Usuario.client.RolClient;
+import cl.friki.Usuario.dto.RolDTO;
 import cl.friki.Usuario.dto.UsuarioDTO;
 import cl.friki.Usuario.model.Usuario;
 import cl.friki.Usuario.service.UsuarioService;
@@ -24,17 +27,28 @@ public class UsuarioController {
     @Autowired
     private UsuarioService service;
 
-    @GetMapping
-    public ResponseEntity<List<Usuario>> listarUsuarios(){
-        
-        List<Usuario> listaUsuarios = service.listarUsers();
+    @Autowired                  
+    private RolClient rolClient;
 
-        if(listaUsuarios.isEmpty()){
-            return ResponseEntity.noContent().build();
-        }else{
-            return ResponseEntity.ok(listaUsuarios);
-        }
+    @GetMapping
+    public ResponseEntity<List<UsuarioDTO>> listarUsuarios(){
+    List<Usuario> listaUsuarios = service.listarUsers();
+    
+    List<UsuarioDTO> listaDTO = listaUsuarios.stream()
+        .map(u -> {
+            UsuarioDTO dto = new UsuarioDTO();
+            dto.setId(u.getId());
+            dto.setNombreUsuario(u.getNombreUsuario());
+            dto.setDireccion(u.getDireccion().getCalle());
+            return dto;
+        })
+        .collect(Collectors.toList());
+
+    if(listaDTO.isEmpty()){
+        return ResponseEntity.noContent().build();
     }
+    return ResponseEntity.ok(listaDTO);
+}
 
     //buscar usuario por id
     @GetMapping("/{id}")
@@ -85,9 +99,12 @@ public class UsuarioController {
             dto.setId(usuario.getId());
             dto.setNombreUsuario(usuario.getNombreUsuario());
             dto.setDireccion(usuario.getDireccion().getCalle());
+            RolDTO rol = rolClient.obtenerRol(usuario.getIdRol());
+            dto.setRol(rol.getNombreRol());
 
             return ResponseEntity.ok(dto);
         }catch(Exception e){
+            e.printStackTrace();
             return ResponseEntity.notFound().build();
         }
     }

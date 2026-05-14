@@ -24,12 +24,12 @@ public class Producto {
     @Column(nullable = false, unique = true)
     private String nombreProducto;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private Integer cantProducto;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private Integer precio;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String tipoProducto;
 }

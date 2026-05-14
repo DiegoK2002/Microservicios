@@ -10,6 +10,4 @@ import cl.friki.Producto.model.Producto;
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Integer>{
 
-    Optional<Producto> findById(String id);
-
 }

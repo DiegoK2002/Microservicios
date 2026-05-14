@@ -1,5 +1,6 @@
 package cl.friki.Usuario.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,11 +30,10 @@ public class Usuario {
     @Column(nullable = false, unique = true)
     private String correo;
     
-    //La contraseña en un proyecto real no se guarda así, pero esto es solo un proyecto academico.
     @Column(nullable = false)
     private String password;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "direccion_id", nullable = false)
     private Direccion direccion;
 
