@@ -1,0 +1,137 @@
+LOGIN Y USUARIO
+
+*Login y Usuario deben estar corriendo a la vez para que funcionen*
+
+
+Crear usuario
+Post - http://localhost:8081/api/v1/register
+
+
+{
+    "nombreUsuario": "a",
+    "correo": "b",
+    "password": "1234",
+    "direccion": {
+        "numVivienda": "1234",
+        "calle": "1234",
+        "ciudad": "a",
+        "region": "f"
+    },
+    "idRol": 1
+}
+
+--------------------------------------------------------------------
+
+logearse
+Post - http://localhost:8081/api/v1/login
+
+{
+    "nombreUsuario": "a",
+    "password": "1234"
+}
+
+--------------------------------------------------------------------
+
+
+Ver roles
+Get - http://localhost:8081/api/v1/roles
+
+--------------------------------------------------------------------
+
+Ver usuarios:
+Get - http://localhost:8085/api/v1/usuarios
+
+--------------------------------------------------------------------
+
+Buscar usuario por id
+Get - http://localhost:8085/api/v1/usuarios/{id}
+
+--------------------------------------------------------------------
+
+Ver dto usuario
+Get - http://localhost:8085/api/v1/usuarios/dto/{id}
+
+--------------------------------------------------------------------
+
+Borrar usuario
+Delete - http://localhost:8085/api/v1/usuarios/{id}
+
+--------------------------------------------------------------------
+
+Actualizar usuario
+Put - http://localhost:8085/api/v1/usuarios/{id}
+
+{
+    "nombreUsuario": "holahola",
+    "correo": "bfdfdf",
+    "password": "123456789",
+    "direccion": {
+        "numVivienda": "123456789",
+        "calle": "123456789",
+        "ciudad": "abc",
+        "region": "fgh"
+    }
+}
+
+--------------------------------------------------------------------
+
+PRODUCTO
+
+Ver productos:
+
+Get - http://localhost:8086/api/v1/productos
+
+
+--------------------------------------------------------------------
+
+Crear producto
+
+Post - http://localhost:8086/api/v1/productos
+
+{
+    "nombreProducto": "manzana",
+    "cantProducto": 5,
+    "precio": 8000,
+    "tipoProducto": "fruta"
+}
+
+
+--------------------------------------------------------------------
+
+Buscar producto por id
+
+Get - http://localhost:8086/api/v1/productos/{id}
+
+
+--------------------------------------------------------------------
+
+Buscar dto de producto
+
+Get - http://localhost:8086/api/v1/productos/dto/{id}
+
+--------------------------------------------------------------------
+
+Actualizar producto
+
+Put - http://localhost:8086/api/v1/productos/{id}
+
+{
+    "nombreProducto": "pera",
+    "cantProducto": 10,
+    "precio": 4000,
+    "tipoProducto": "fruta"
+}
+
+--------------------------------------------------------------------
+
+eliminar producto
+
+Delete - http://localhost:8086/api/v1/productos/{id}
+
+--------------------------------------------------------------------
+
+Buscar producto por nombre
+
+Get - http://localhost:8086/api/v1/productos/buscar?nombre=pera       
+*Cambiar pera
+

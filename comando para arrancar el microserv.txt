@@ -1,0 +1,8 @@
+// comando para arrancar el microservicio reembolsos
+
+.\mvnw spring-boot:run
+
+
+//nombre de la carpeta de donde se inicia
+
+cd Reembolsos_completo
