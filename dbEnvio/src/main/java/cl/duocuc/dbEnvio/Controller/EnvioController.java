@@ -14,14 +14,18 @@ import org.springframework.web.bind.annotation.RestController;
 import cl.duocuc.dbEnvio.Dto.EnvioDTO;
 import cl.duocuc.dbEnvio.Model.Envio;
 import cl.duocuc.dbEnvio.Service.EnvioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/envios")
+@Tag(name = "Envios", description = "Operaciones sobre envios")
 public class EnvioController {
     @Autowired
     private EnvioService service;
 
     @GetMapping
+    @Operation(summary = "Retorna la lista completa de compras")
     public ResponseEntity<List<Envio>> listarEnvios() {
         List<Envio> envios = service.listaEnvios();
         
@@ -33,6 +37,7 @@ public class EnvioController {
     }
 
     @GetMapping("/dto/{id}")
+    @Operation(summary = "Retorna un Envio DTO segun el ID proporcionado", description = "Metodo que permite retonar un envio DTO, normalmente se usa cuando otro microservicio del sistema necesita datos de un envio")
     public ResponseEntity<EnvioDTO> buscarDTO(@PathVariable Integer id) {
         try {
             Envio envio = service.buscarPorId(id);
@@ -48,16 +53,18 @@ public class EnvioController {
     }
 
     @PostMapping
+    @Operation(summary = "Registra un envio en el sistema")
     public ResponseEntity<Envio> guardarEnvio(@RequestBody Envio envio) {
-    try {
-        return ResponseEntity.ok(service.guardarEnvio(envio));
-    } catch (Exception e) {
-        e.printStackTrace();
-        return ResponseEntity.badRequest().build();
+        try {
+            return ResponseEntity.ok(service.guardarEnvio(envio));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
     }
-}
 
     @GetMapping("/id/{id}")
+    @Operation(summary = "Retorna un Envio mediante el ID", description = "Retorna un Envio mediante el ID proporcionado")
     public ResponseEntity<Envio> buscarPorId(@PathVariable Integer id) {
         try {
             Envio envio = service.buscarPorId(id);

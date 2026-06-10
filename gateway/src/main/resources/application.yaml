@@ -1,0 +1,64 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: Login
+          uri: lb://login_bd
+          predicates:
+        - Path=/api/v1
+
+        - id: Usuario
+          uri: usuarios_bd
+          predicates:
+        - Path=/api/v1/usuarios
+
+        - id: Producto
+          uri: producto_bd
+          predicates:
+        - Path=/api/v1/productos
+
+        - id: dbCompra
+          uri: ms_compras
+          predicates:
+        - Path=/api/v1/compras
+
+        - id: dbResenas
+          uri: ms_resenas
+          predicates:
+        - Path=/api/v1/resenas
+
+        - id: dbEnvio
+          uri: ms_envios
+          predicates:
+        - Path=/api/v1/envios
+
+        - id: Reembolsos
+          uri: reembolsos_db
+          predicates:
+        - Path=/api/v1/reembolsos
+
+        - id: Notificaciones
+          uri: notificaciones_db
+          predicates:
+        - Path=/api/v1/notificaciones
+
+        - id: dbReportes
+          uri: ms_reportes
+          predicates:
+        - Path=/api/v1/reportes
+
+        - id: Remuneraciones
+          uri: remuneraciones_db
+          predicates:
+        - Path=/api/v1/remuneraciones

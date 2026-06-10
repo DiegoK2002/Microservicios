@@ -15,15 +15,21 @@ import org.springframework.web.bind.annotation.RestController;
 import cl.friki.Login.dto.RolDTO;
 import cl.friki.Login.model.Rol;
 import cl.friki.Login.service.RolService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/roles")
+@Tag(name = "Roles", description = "Operación sobre los roles de usuarios")
 public class RolController {
 
     @Autowired
     private RolService rolService;
 
     @GetMapping
+    @Operation(summary = "Retorna la lista completa de roles")
     public ResponseEntity<List<Rol>> listarRoles() {
         List<Rol> roles = rolService.listarRoles();
         if (roles.isEmpty()) {
@@ -33,6 +39,11 @@ public class RolController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Retorna un rol en específico mediante el id", description = "Retorna un rol según el id proporcionado")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Rol encontrado"),
+                            @ApiResponse(responseCode = "404", description = "Rol no encontrado"),
+                            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<Rol> buscarPorId(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(rolService.buscarPorId(id));
@@ -43,6 +54,7 @@ public class RolController {
 
     // Este endpoint lo llama el microservicio de Usuario por RolClient
     @GetMapping("/dto/{id}")
+    @Operation(summary = "Retorna la versión DTO del rol mediante el id", description = "Metodo que permite retonar un rol DTO, normalmente se usa cuando otro microservicio del sistema necesita datos de un rol")
     public ResponseEntity<RolDTO> obtenerRolDTO(@PathVariable Integer id) {
         try {
             Rol rol = rolService.buscarPorId(id);
@@ -54,11 +66,13 @@ public class RolController {
     }
 
     @PostMapping
+    @Operation(summary = "Registra un nuevo rol")
     public ResponseEntity<Rol> crearRol(@RequestBody Rol rol) {
         return ResponseEntity.ok(rolService.crearRol(rol));
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Elimina un rol por id", description = "Elimina del sistema un rol con solo poner su id")
     public ResponseEntity<?> eliminarRol(@PathVariable Integer id) {
         try {
             rolService.eliminarRol(id);

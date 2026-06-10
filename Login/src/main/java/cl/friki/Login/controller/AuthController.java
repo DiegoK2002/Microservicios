@@ -10,15 +10,19 @@ import org.springframework.web.bind.annotation.RestController;
 import cl.friki.Login.dto.LoginRequest;
 import cl.friki.Login.model.Register;
 import cl.friki.Login.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1")
+@Tag(name = "Autentificación", description = "Operación sobre crear cuentas e inicios de sesión")
 public class AuthController {
 
     @Autowired
     private AuthService authService;
 
     @PostMapping("/register")
+    @Operation(summary = "Crea un nuevo usuario dentro del sistema")
     public ResponseEntity<Register> register(@RequestBody Register register) {
         try {
             return ResponseEntity.ok(authService.registrar(register));
@@ -29,6 +33,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @Operation(summary = "Autentifica que el usuario ha sido creado")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
             return ResponseEntity.ok(authService.login(request));

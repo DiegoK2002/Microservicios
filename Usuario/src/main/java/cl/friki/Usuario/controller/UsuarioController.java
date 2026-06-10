@@ -19,9 +19,14 @@ import cl.friki.Usuario.dto.RolDTO;
 import cl.friki.Usuario.dto.UsuarioDTO;
 import cl.friki.Usuario.model.Usuario;
 import cl.friki.Usuario.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/usuarios")
+@Tag(name = "Usuarios", description = "Operaciones sobre usuarios")
 public class UsuarioController {
 
     @Autowired
@@ -31,40 +36,46 @@ public class UsuarioController {
     private RolClient rolClient;
     
     @GetMapping
-public ResponseEntity<List<UsuarioDTO>> listarUsuarios() {
-    List<Usuario> listaUsuarios = service.listarUsers();
+    @Operation(summary = "Retorna la lista de usuarios")
+    public ResponseEntity<List<UsuarioDTO>> listarUsuarios() {
+        List<Usuario> listaUsuarios = service.listarUsers();
     
-    List<UsuarioDTO> listaDTO = listaUsuarios.stream()
-        .map(u -> {
-            UsuarioDTO dto = new UsuarioDTO();
-            dto.setId(u.getId());
-            dto.setNombreUsuario(u.getNombreUsuario());
+        List<UsuarioDTO> listaDTO = listaUsuarios.stream()
+            .map(u -> {
+                UsuarioDTO dto = new UsuarioDTO();
+                dto.setId(u.getId());
+                dto.setNombreUsuario(u.getNombreUsuario());
             
-            if (u.getDireccion() != null) {
-                dto.setDireccion(u.getDireccion().getCalle());
-            }
-
-            try {
-                if (u.getIdRol() != null) {
-                    RolDTO rol = rolClient.obtenerRol(u.getIdRol());
-                    dto.setRol(rol.getNombreRol());
+                if (u.getDireccion() != null) {
+                    dto.setDireccion(u.getDireccion().getCalle());
                 }
-            } catch (Exception e) {
-                dto.setRol("Error al obtener rol");
-            }
-            
-            return dto;
-        })
-        .collect(Collectors.toList());
 
-    if (listaDTO.isEmpty()) {
-        return ResponseEntity.noContent().build();
+                try {
+                    if (u.getIdRol() != null) {
+                        RolDTO rol = rolClient.obtenerRol(u.getIdRol());
+                        dto.setRol(rol.getNombreRol());
+                    }
+                } catch (Exception e) {
+                    dto.setRol("Error al obtener rol");
+                }
+            
+                return dto;
+            })
+            .collect(Collectors.toList());
+
+        if (listaDTO.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(listaDTO);
     }
-    return ResponseEntity.ok(listaDTO);
-}
 
     //buscar usuario por id
     @GetMapping("/{id}")
+    @Operation(summary = "Busca a un usuario por ID", description = "Retorna un usuario mediante el ID porporcionado")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Usuario encontrado"),
+                            @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
+                            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<Usuario> buscarPorId(@PathVariable Integer id){
         try{
             Usuario usuario = service.buscarPorId(id);
@@ -76,12 +87,14 @@ public ResponseEntity<List<UsuarioDTO>> listarUsuarios() {
 
     //crear usuario nuevo
     @PostMapping
+    @Operation(summary = "Registra un nuevo usuario")
     public ResponseEntity<Usuario> guardar(@RequestBody Usuario usuario){
         return ResponseEntity.ok(service.crearUsuario(usuario));
     }
 
     //eliminar usuario
     @DeleteMapping("/{id}")
+    @Operation(summary = "Elimina a un usuario por ID", description = "Elimina del sistema a un usuario mediante su ID")
     public ResponseEntity<?> eliminar(@PathVariable Integer id){
         try{
             service.eliminarUsuario(id);
@@ -93,6 +106,7 @@ public ResponseEntity<List<UsuarioDTO>> listarUsuarios() {
 
     //actualizar usuario
     @PutMapping("/{id}")
+    @Operation(summary = "Actualiza los datos de un usuario")
     public ResponseEntity<Usuario> actualizar(@PathVariable Integer id, @RequestBody Usuario usuario){
         try{
             return ResponseEntity.ok(service.actualizarUsuario(id, usuario));
@@ -103,6 +117,7 @@ public ResponseEntity<List<UsuarioDTO>> listarUsuarios() {
 
     //buscar dto por id
     @GetMapping("/dto/{id}")
+    @Operation(summary = "Retorna un usuario DTO segun el ID proporcionado", description = "Metodo que permite retonar un usuairo DTO, normalmente se usa cuando otro microservicio del sistema necesita datos de un usuario")
     public ResponseEntity<UsuarioDTO> obtenerUsuarioDTO(@PathVariable Integer id){
         try{
             Usuario usuario = service.buscarPorId(id);
@@ -123,17 +138,18 @@ public ResponseEntity<List<UsuarioDTO>> listarUsuarios() {
     }
 
     @GetMapping("/buscar/{nombreUsuario}")
-public ResponseEntity<Usuario> buscarPorNombre(@PathVariable String nombreUsuario) {
-    try {
-        Usuario usuario = service.buscarPorNombreUsuario(nombreUsuario);
+    @Operation(summary = "Busca a un usuario mediante su nombre", description = "Busca a un usuario mediante el nombre proporcionado")
+    public ResponseEntity<Usuario> buscarPorNombre(@PathVariable String nombreUsuario) {
+        try {
+            Usuario usuario = service.buscarPorNombreUsuario(nombreUsuario);
         
-        if (usuario == null) {
+            if (usuario == null) {
+                return ResponseEntity.notFound().build();
+            }
+        
+            return ResponseEntity.ok(usuario);
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
-        
-        return ResponseEntity.ok(usuario);
-    } catch (Exception e) {
-        return ResponseEntity.notFound().build();
     }
-}
 }

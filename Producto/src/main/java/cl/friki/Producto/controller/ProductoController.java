@@ -17,15 +17,21 @@ import org.springframework.web.bind.annotation.RestController;
 import cl.friki.Producto.dto.ProductoDTO;
 import cl.friki.Producto.model.Producto;
 import cl.friki.Producto.service.ProductoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/productos")
+@Tag(name = "Productos", description = "Operaciones sobre productos")
 public class ProductoController {
 
     @Autowired
     private ProductoService service;
 
     @GetMapping
+    @Operation(summary = "Lista todos los productos")
     public ResponseEntity<List<Producto>> listarProductos(){
         
         List<Producto> listaProductos = service.listarProducts();
@@ -39,6 +45,11 @@ public class ProductoController {
 
     //buscar producto por id
     @GetMapping("/{id}")
+    @Operation(summary = "Retorna un producto mediante el ID", description = "Retorna un producto mediante el ID proporcionado")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Paciente encontrado"),
+                            @ApiResponse(responseCode = "404", description = "Paciente no encontrado"),
+                            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<Producto> buscarPorId(@PathVariable Integer id){
         try{
             Producto producto = service.buscarPorId(id);
@@ -50,12 +61,14 @@ public class ProductoController {
 
     //crear producto nuevo
     @PostMapping
+    @Operation(summary = "Registra un nuevo producto")
     public ResponseEntity<Producto> guardar(@RequestBody Producto producto){
         return ResponseEntity.ok(service.crearProducto(producto));
     }
 
     //eliminar producto
     @DeleteMapping("/{id}")
+    @Operation(summary = "Elimina un producto por ID", description = "Elimina del sistema un producto mediante el ID proporcionado")
     public ResponseEntity<?> eliminar(@PathVariable Integer id){
         try{
             service.eliminarProducto(id);
@@ -67,6 +80,7 @@ public class ProductoController {
 
     //actualizar producto
     @PutMapping("/{id}")
+    @Operation(summary = "Actualiza los datos del producto mediante el ID", description = "Actualiza los datos buscando el ID del producto y reemplazando la información de este por los datos nuevos")
     public ResponseEntity<Producto> actualizar(@PathVariable Integer id, @RequestBody Producto producto){
         try{
             return ResponseEntity.ok(service.actualizarProducto(id, producto));
@@ -77,6 +91,7 @@ public class ProductoController {
 
     //buscar dto por id
     @GetMapping("/dto/{id}")
+    @Operation(summary = "Retorna un producto DTO segun el ID proporcionado", description = "Metodo que permite retonar un producto DTO, normalmente se usa cuando otro microservicio del sistema necesita datos de un producto")
     public ResponseEntity<ProductoDTO> obtenerProductoDTO(@PathVariable Integer id){
         try{
             Producto producto = service.buscarPorId(id);
@@ -94,6 +109,7 @@ public class ProductoController {
     }
 
     @GetMapping("/buscar")
+    @Operation(summary = "Busca un producto mediante su nombre")
     public ResponseEntity<List<Producto>> buscarPorNombre(@RequestParam String nombre) {
         List<Producto> productos = service.buscarPorNombre(nombre);
         if (productos.isEmpty()) {
