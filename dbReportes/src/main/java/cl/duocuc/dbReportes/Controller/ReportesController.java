@@ -14,14 +14,18 @@ import org.springframework.web.bind.annotation.RestController;
 import cl.duocuc.dbReportes.Dto.ReportesDTO;
 import cl.duocuc.dbReportes.Model.Reportes;
 import cl.duocuc.dbReportes.Service.ReportesService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/reportes")
+@Tag(name = "Opereaciones sobre reportes")
 public class ReportesController {
     @Autowired
     private ReportesService service;
 
     @GetMapping
+    @Operation(summary = "Retorna la lista completa de reportes")
     public ResponseEntity<List<Reportes>> listarReportes(){
         List<Reportes> listaReportes = service.listaReporte();
         if (listaReportes.isEmpty()) {
@@ -32,6 +36,7 @@ public class ReportesController {
     }
 
     @GetMapping("/dto/{id}")
+    @Operation(summary = "Retorna un reporte DTO segun el ID proporcionado", description = "Metodo que permite retonar un reporte DTO, normalmente se usa cuando otro microservicio del sistema necesita datos de un reporte")
     public ResponseEntity<ReportesDTO> buscarDTO(@PathVariable Integer id) {
         try {
             Reportes reportes = service.buscarPorId(id);
@@ -47,6 +52,7 @@ public class ReportesController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Retorna un reporte mediante ID", description = "Retorna un reporte mediante un ID proporcionado")
     public ResponseEntity<Reportes> obtenerReportePorId(@PathVariable Integer id) {
         try {
             Reportes reportes = service.buscarPorId(id);
@@ -57,6 +63,7 @@ public class ReportesController {
     }
 
     @PostMapping
+    @Operation(summary = "Registra un nuevo reporte", description = "Registra un reporte en el sistema")
     public ResponseEntity<Reportes> guardarReporte(@RequestBody Reportes reportes) {
         Reportes nuevoReporte = service.guardarReportes(reportes);
         return ResponseEntity.ok(nuevoReporte);
