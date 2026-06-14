@@ -3,6 +3,7 @@ package cl.duocuc.dbCompra.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cl.duocuc.dbCompra.Model.Compra;
 import cl.duocuc.dbCompra.Service.CompraService;
+import feign.FeignException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import cl.duocuc.dbCompra.Client.ProductoClient;
@@ -46,13 +48,20 @@ public class CompraController {
     }
 
     @GetMapping("/id/{id}")
-    @Operation(summary = "Retorna una compra mediante el ID", description = "En realidad retorna compra DTO pero en ambos casos muestra todo lo de la compra")
+    @Operation(summary = "Retorna una compra mediante el ID", description = "Retorna el DTO de la compra con los datos enriquecidos de Producto y Usuario")
     public ResponseEntity<CompraDTO> buscarDTO(@PathVariable Integer id) {
         try {
+        // 1. Buscar la compra base
             Compra compra = service.buscarPorId(id);
+            if (compra == null) {
+                return ResponseEntity.notFound().build(); // 404 claro si la compra no existe
+            }
+
+        // 2. Comunicación con otros microservicios
             ProductoDTO producto = productoClient.obtenerDatosProducto(compra.getIdProducto());
             UsuarioDTO usuario = usuarioClient.obtenerDatosUsuario(compra.getIdUsuario());
 
+        // 3. Construcción del DTO
             CompraDTO compraDTO = new CompraDTO();
             compraDTO.setId(compra.getId());
             compraDTO.setDiaCompra(compra.getDiaCompra());
@@ -60,13 +69,19 @@ public class CompraController {
             compraDTO.setAnoCompra(compra.getAnoCompra());
             compraDTO.setProductoDTO(producto);
             compraDTO.setUsuarioDTO(usuario);
-            compraDTO.setValorTotal(id);
+        
+        // Calcular y asignar el valor total correctamente
             Integer valorTotal = calcularValorTotal(producto);
             compraDTO.setValorTotal(valorTotal);
 
             return ResponseEntity.ok(compraDTO);
+
+        } catch (FeignException.NotFound e) { 
+        // Si usas Spring Cloud OpenFeign, esto captura específicamente si el producto/usuario no existen
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+        // Cualquier otro error (caída de server, error de código) devuelve un 500 para saber que algo explotó
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
