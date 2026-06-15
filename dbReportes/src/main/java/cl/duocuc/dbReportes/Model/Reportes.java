@@ -25,10 +25,6 @@ public class Reportes {
     private Integer id;
 
     @Column(nullable = false)
-    @Schema(description = "Ventas realizadas por mes en el reporte", example = "Junio")
-    private Integer ventasXMes;
-
-    @Column(nullable= false)
-    @Schema(description = "Total de las ventas dentro del reporte", example = "30624")
-    private Integer ventasTotales;
+    @Schema(description = "Id único de la compra que se va a reportar", example = "7")
+    private Integer idCompra;
 }

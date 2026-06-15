@@ -1,4 +1,4 @@
-package cl.duocuc.dbCompra.Dto;
+package cl.duocuc.dbReportes.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

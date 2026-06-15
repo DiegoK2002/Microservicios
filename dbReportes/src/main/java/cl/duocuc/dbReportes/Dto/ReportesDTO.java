@@ -9,6 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReportesDTO {
     private Integer id;
-    private Integer ventasXMes;
-    private Integer ventasTotales;
+    private CompraDTO compraDTO;
 }

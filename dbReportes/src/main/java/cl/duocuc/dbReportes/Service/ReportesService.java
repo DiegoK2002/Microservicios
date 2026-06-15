@@ -21,6 +21,11 @@ public class ReportesService {
         return repo.findById(id).orElseThrow(() -> new RuntimeException("Reporte no encontrado"));
     }
 
+    public Reportes buscarPorIdCompra(Integer idCompra) {
+        // Buscamos en la base de datos local un reporte cuyo 'idCompra' coincida
+        return repo.findByIdCompra(idCompra).orElse(null);
+    }
+
     public Reportes guardarReportes(Reportes reporte){
         return repo.save(reporte);
     }
