@@ -1,0 +1,26 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: ms_clientes
+          uri: lb://msClientes
+          predicates:
+            - Path=/api/v1/clientes/**
+
+        - id: ms_vehiculos
+          uri: lb://msVehiculos
+          predicates:
+            - Path=/api/v1/vehiculos/**
+      
+          
