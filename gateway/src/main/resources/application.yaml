@@ -16,49 +16,49 @@ spring:
         - id: Login
           uri: lb://login_bd
           predicates:
-        - Path=/api/v1
+            - Path=/api/v1/**
 
         - id: Usuario
-          uri: usuarios_bd
+          uri: lb://usuarios_bd
           predicates:
-        - Path=/api/v1/usuarios
+            - Path=/api/v1/usuarios/**
 
         - id: Producto
-          uri: producto_bd
+          uri: lb://producto_bd
           predicates:
-        - Path=/api/v1/productos
+            - Path=/api/v1/productos/**
 
         - id: dbCompra
-          uri: ms_compras
+          uri: lb://ms_compras
           predicates:
-        - Path=/api/v1/compras
+            - Path=/api/v1/compras/**
 
         - id: dbResenas
-          uri: ms_resenas
+          uri: lb://ms_resenas
           predicates:
-        - Path=/api/v1/resenas
+            - Path=/api/v1/resenas/**
 
         - id: dbEnvio
-          uri: ms_envios
+          uri: lb://ms_envios
           predicates:
-        - Path=/api/v1/envios
+            - Path=/api/v1/envios/**
 
         - id: Reembolsos
-          uri: reembolsos_db
+          uri: lb://reembolsos_db
           predicates:
-        - Path=/api/v1/reembolsos
+            - Path=/api/v1/reembolsos/**
 
         - id: Notificaciones
-          uri: notificaciones_db
+          uri: lb://notificaciones_db
           predicates:
-        - Path=/api/v1/notificaciones
+            - Path=/api/v1/notificaciones/**
 
         - id: dbReportes
-          uri: ms_reportes
+          uri: lb://ms_reportes
           predicates:
-        - Path=/api/v1/reportes
+            - Path=/api/v1/reportes/**
 
         - id: Remuneraciones
-          uri: remuneraciones_db
+          uri: lb://remuneraciones_db
           predicates:
-        - Path=/api/v1/remuneraciones
+            - Path=/api/v1/remuneraciones/**

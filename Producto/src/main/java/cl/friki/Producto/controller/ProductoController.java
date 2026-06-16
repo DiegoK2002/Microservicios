@@ -62,8 +62,13 @@ public class ProductoController {
     //crear producto nuevo
     @PostMapping
     @Operation(summary = "Registra un nuevo producto")
-    public ResponseEntity<Producto> guardar(@RequestBody Producto producto){
-        return ResponseEntity.ok(service.crearProducto(producto));
+    public ResponseEntity<?> guardar(@RequestBody Producto producto){
+        try{
+            return ResponseEntity.ok(service.crearProducto(producto));
+        } catch (Exception e){
+            // Esto te permitirá ver en los logs por qué falló exactamente
+        return ResponseEntity.status(400).body("Error al guardar: " + e.getMessage());
+        }
     }
 
     //eliminar producto
