@@ -15,17 +15,17 @@ public class DataLoader {
     CommandLineRunner initPromociones(PromocionesRepository repo1){
         return args -> {
             if(repo1.count() == 0){
-                repo1.save(new Promociones(null, 0.00));
-                repo1.save(new Promociones(null, 0.10));
-                repo1.save(new Promociones(null, 0.20));
-                repo1.save(new Promociones(null, 0.30));
-                repo1.save(new Promociones(null, 0.40));
-                repo1.save(new Promociones(null, 0.50));
-                repo1.save(new Promociones(null, 0.60));
-                repo1.save(new Promociones(null, 0.70));
-                repo1.save(new Promociones(null, 0.80));
-                repo1.save(new Promociones(null, 0.90));
-                repo1.save(new Promociones(null, 1.00));
+                repo1.save(new Promociones(null, 1.00, "100%"));
+                repo1.save(new Promociones(null, 0.10, "90%"));
+                repo1.save(new Promociones(null, 0.20, "80%"));
+                repo1.save(new Promociones(null, 0.30, "70%"));
+                repo1.save(new Promociones(null, 0.40, "60%"));
+                repo1.save(new Promociones(null, 0.50, "50%"));
+                repo1.save(new Promociones(null, 0.60, "40%"));
+                repo1.save(new Promociones(null, 0.70, "30%"));
+                repo1.save(new Promociones(null, 0.80, "20%"));
+                repo1.save(new Promociones(null, 0.90, "10%"));
+                repo1.save(new Promociones(null, 0.00, "0%"));
             }
         };
     }

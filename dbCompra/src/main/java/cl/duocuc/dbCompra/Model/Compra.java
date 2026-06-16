@@ -46,6 +46,10 @@ public class Compra {
     @Schema(description = "Id único del producto, esta información se trae desde otro microservicio", example = "1")
     private Integer idProducto;
 
+    @Column(nullable = false)
+    @Schema(description = "Id único de la promoción", example = "3")
+    private Integer idPromocion;
+
     @ManyToOne
     @JoinColumn(name = "id_metodo_pago")
     @Schema(description = "Nombre del método de pago", example = "Paypal")

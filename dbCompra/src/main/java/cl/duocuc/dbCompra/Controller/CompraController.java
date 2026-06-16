@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import cl.duocuc.dbCompra.Model.Compra;
+import cl.duocuc.dbCompra.Model.Promociones;
+import cl.duocuc.dbCompra.Repository.PromocionesRepository;
 import cl.duocuc.dbCompra.Service.CompraService;
 import feign.FeignException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,6 +39,9 @@ public class CompraController {
     @Autowired
     private UsuarioClient usuarioClient;
 
+    @Autowired
+    private PromocionesRepository repo;
+
     @GetMapping
     @Operation(summary = "Retorna la lista completa compras")
     public ResponseEntity<List<Compra>> listarCompras(){
@@ -52,15 +57,15 @@ public class CompraController {
     @Operation(summary = "Retorna una compra mediante el ID", description = "Retorna el DTO de la compra con los datos enriquecidos de Producto y Usuario")
     public ResponseEntity<CompraDTO> buscarDTO(@PathVariable Integer id) {
         try {
-        // 1. Buscar la compra base
             Compra compra = service.buscarPorId(id);
-            if (compra == null) {
-                return ResponseEntity.notFound().build(); // 404 claro si la compra no existe
-            }
+            if (compra == null) return ResponseEntity.notFound().build();
 
-        // 2. Comunicación con otros microservicios
             ProductoDTO producto = productoClient.obtenerDatosProducto(compra.getIdProducto());
             UsuarioDTO usuario = usuarioClient.obtenerDatosUsuario(compra.getIdUsuario());
+        
+        // Buscamos la promoción en la BD
+            Promociones promocion = repo.findById(compra.getIdPromocion())
+                                    .orElse(new Promociones(null, 0.0, "0%"));
 
         // 3. Construcción del DTO
             CompraDTO compraDTO = new CompraDTO();
@@ -72,7 +77,7 @@ public class CompraController {
             compraDTO.setUsuarioDTO(usuario);
         
         // Calcular y asignar el valor total correctamente
-            Integer valorTotal = calcularValorTotal(producto);
+            Integer valorTotal = calcularValorTotal(producto, promocion);
             compraDTO.setValorTotal(valorTotal);
 
             return ResponseEntity.ok(compraDTO);
@@ -87,11 +92,14 @@ public class CompraController {
     }
 
     //Método para que pueda calcular el valor total
-    private Integer calcularValorTotal(ProductoDTO producto) {
-        if (producto == null || producto.getPrecio() == null) {
-            return 0;
-        }
-        return producto.getPrecio();
+        private Integer calcularValorTotal(ProductoDTO producto, Promociones promocion) {
+        if (producto == null || producto.getPrecio() == null) return 0;
+    
+        double precioOriginal = producto.getPrecio();
+    // Aplicamos el descuento: precio * (1 - porcentaje)
+        double precioFinal = precioOriginal * (1.0 - promocion.getPorcentaje());
+    
+        return (int) precioFinal;
     }
 
     @PostMapping
