@@ -2,6 +2,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
 
 spring:
   application:
@@ -14,51 +16,51 @@ spring:
           lower-case-service-id: true
       routes:
         - id: Login
-          uri: lb://login_bd
+          uri: lb://Login
           predicates:
             - Path=/api/v1/**
 
         - id: Usuario
-          uri: lb://usuarios_bd
+          uri: lb://Usuario
           predicates:
             - Path=/api/v1/usuarios/**
 
         - id: Producto
-          uri: lb://producto_bd
+          uri: lb://Producto
           predicates:
             - Path=/api/v1/productos/**
 
         - id: dbCompra
-          uri: lb://ms_compras
+          uri: lb://dbCompra
           predicates:
             - Path=/api/v1/compras/**
 
         - id: dbResenas
-          uri: lb://ms_resenas
+          uri: lb://dbResenas
           predicates:
             - Path=/api/v1/resenas/**
 
         - id: dbEnvio
-          uri: lb://ms_envios
+          uri: lb://dbEnvio
           predicates:
             - Path=/api/v1/envios/**
 
         - id: Reembolsos
-          uri: lb://reembolsos_db
+          uri: lb://Reembolsos
           predicates:
             - Path=/api/v1/reembolsos/**
 
         - id: Notificaciones
-          uri: lb://notificaciones_db
+          uri: lb://Notificaciones
           predicates:
             - Path=/api/v1/notificaciones/**
 
         - id: dbReportes
-          uri: lb://ms_reportes
+          uri: lb://dbReportes
           predicates:
             - Path=/api/v1/reportes/**
 
         - id: Remuneraciones
-          uri: lb://remuneraciones_db
+          uri: lb://Remuneraciones
           predicates:
             - Path=/api/v1/remuneraciones/**

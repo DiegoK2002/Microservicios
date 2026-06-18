@@ -11,6 +11,7 @@ import cl.duocuc.dbCompra.Dto.ProductoDTO;
 import cl.duocuc.dbCompra.Dto.UsuarioDTO;
 import cl.duocuc.dbCompra.Model.Compra;
 import cl.duocuc.dbCompra.Repository.CompraRepository;
+import feign.FeignException;
 
 @Service
 public class CompraService {
@@ -32,12 +33,16 @@ public class CompraService {
     }
 
     public Compra guardarCompra(Compra compra) {
-        UsuarioDTO usuario = usuarioClient.obtenerDatosUsuario(compra.getIdUsuario());
-        if (usuario == null) {
-            throw new RuntimeException("Usuario no encontrado");
+        try {
+            UsuarioDTO usuario = usuarioClient.obtenerUsuarioDTO(compra.getIdUsuario());
+            if (usuario == null) {
+                throw new RuntimeException("Usuario no encontrado");
+            }
+        }catch (FeignException.NotFound e) {
+        throw new RuntimeException("El usuario con ID " + compra.getIdUsuario() + " no fue encontrado en el sistema.");
         }
 
-        ProductoDTO producto = productoClient.obtenerDatosProducto(compra.getIdProducto());
+        ProductoDTO producto = productoClient.obtenerProductoDTO(compra.getIdProducto());
         if (producto == null) {
             throw new RuntimeException("Producto no encontrado");
         }

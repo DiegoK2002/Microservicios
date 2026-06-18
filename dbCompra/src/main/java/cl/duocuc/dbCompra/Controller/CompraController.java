@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import cl.duocuc.dbCompra.Model.Compra;
@@ -60,8 +59,8 @@ public class CompraController {
             Compra compra = service.buscarPorId(id);
             if (compra == null) return ResponseEntity.notFound().build();
 
-            ProductoDTO producto = productoClient.obtenerDatosProducto(compra.getIdProducto());
-            UsuarioDTO usuario = usuarioClient.obtenerDatosUsuario(compra.getIdUsuario());
+            ProductoDTO producto = productoClient.obtenerProductoDTO(compra.getIdProducto());
+            UsuarioDTO usuario = usuarioClient.obtenerUsuarioDTO(compra.getIdUsuario());
         
         // Buscamos la promoción en la BD
             Promociones promocion = repo.findById(compra.getIdPromocion())

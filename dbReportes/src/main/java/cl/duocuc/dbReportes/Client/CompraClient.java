@@ -10,7 +10,7 @@ import cl.duocuc.dbReportes.Dto.CompraDTO;
 
 @FeignClient(name = "dbCompra", url = "http://localhost:8084")
 public interface CompraClient {
-    @GetMapping("/api/v1/compras/dto/{id}")
+    @GetMapping("/api/v1/compras/id/{id}")
     CompraDTO obtenerCompraPorId(@PathVariable("id") Integer id);
 
     @GetMapping("/api/v1/compras/mes/{mes}")
