@@ -33,10 +33,10 @@ public class DataLoader {
     CommandLineRunner initMetodoPago(MetodoPagoRepository repo2){
         return args -> {
             if(repo2.count() == 0){
-                repo2.save(new MetodoPago(null, "Débito", null));
-                repo2.save(new MetodoPago(null, "Crédito", null));
-                repo2.save(new MetodoPago(null, "Prepago", null));
-                repo2.save(new MetodoPago(null, "PayPal", null));
+                repo2.save(new MetodoPago(null, "Débito"));
+                repo2.save(new MetodoPago(null, "Crédito"));
+                repo2.save(new MetodoPago(null, "Prepago"));
+                repo2.save(new MetodoPago(null, "PayPal"));
             }
         };
     }

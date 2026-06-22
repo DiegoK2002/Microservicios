@@ -10,5 +10,5 @@ import cl.duocuc.dbCompra.Dto.ProductoDTO;
 public interface ProductoClient {
 
     @GetMapping("/api/v1/productos/dto/{id}")
-    ProductoDTO obtenerProductoDTO(@PathVariable("id") Integer id);
+    ProductoDTO obtenerDatosProducto(@PathVariable("id") Integer id);
 }

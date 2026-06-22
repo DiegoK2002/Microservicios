@@ -2,8 +2,6 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
-    register-with-eureka: true
-    fetch-registry: true
 
 spring:
   application:
@@ -18,7 +16,7 @@ spring:
         - id: Login
           uri: lb://Login
           predicates:
-            - Path=/api/v1/**
+            - Path=/api/v1/login, /api/v1/register, /api/v1/roles/**
 
         - id: Usuario
           uri: lb://Usuario
@@ -64,3 +62,6 @@ spring:
           uri: lb://Remuneraciones
           predicates:
             - Path=/api/v1/remuneraciones/**
+
+server:
+  port: 8080

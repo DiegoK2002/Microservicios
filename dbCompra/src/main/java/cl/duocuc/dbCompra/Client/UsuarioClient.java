@@ -10,5 +10,5 @@ import cl.duocuc.dbCompra.Dto.UsuarioDTO;
 public interface UsuarioClient {
 
     @GetMapping("/api/v1/usuarios/dto/{id}")
-    UsuarioDTO obtenerUsuarioDTO(@PathVariable("id") Integer id);
+    UsuarioDTO obtenerDatosUsuario(@PathVariable("id") Integer id);
 }
