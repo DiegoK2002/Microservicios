@@ -1,11 +1,18 @@
 package cl.duocuc.dbEnvio.Dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import java.util.Date;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class CompraDTO {
     private Integer id;
-    private Date fechaCompra;
+    private Integer diaCompra;
+    private Integer mesCompra;
+    private Integer anoCompra;
     private Integer valorTotal;
+    private ProductoDTO productoDTO;
+    private UsuarioDTO usuarioDTO;
 }

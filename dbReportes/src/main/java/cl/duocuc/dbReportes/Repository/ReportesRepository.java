@@ -10,4 +10,6 @@ import cl.duocuc.dbReportes.Model.Reportes;
 @Repository
 public interface ReportesRepository extends JpaRepository<Reportes, Integer> {
     Optional<Reportes> findById(Integer id);
+
+    Optional<Reportes> findByIdCompra(Integer idCompra);
 }

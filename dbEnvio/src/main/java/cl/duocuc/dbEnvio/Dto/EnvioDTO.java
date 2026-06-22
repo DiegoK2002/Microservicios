@@ -9,5 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EnvioDTO {
     private Integer id;
+    private CompraDTO compraDTO;
     private String nombreRepartidor;
 }
