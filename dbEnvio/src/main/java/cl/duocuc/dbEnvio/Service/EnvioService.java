@@ -34,21 +34,21 @@ public class EnvioService {
     }
 
     public Envio guardarEnvio(Envio envio) {
-    CompraDTO compra = compraClient.obtenerCompraPorId(envio.getIdCompra());
-    if (compra == null) {
-        throw new RuntimeException("Compra no encontrada");
+        CompraDTO compra = compraClient.obtenerCompraPorId(envio.getIdCompra());
+        if (compra == null) {
+            throw new RuntimeException("Compra no encontrada");
+        }
+
+        Envio envioGuardado = repo.save(envio);
+
+        NotificacionDTO notificacion = new NotificacionDTO(
+            "cliente@email.com",
+            "Tu envío #" + envioGuardado.getId() + " ha sido creado",
+            java.time.LocalDate.now().toString(),
+            "Enviada"
+        );
+        notificacionClient.enviarAlertaEnvio(notificacion);
+
+        return envioGuardado;
     }
-
-    Envio envioGuardado = repo.save(envio);
-
-    NotificacionDTO notificacion = new NotificacionDTO(
-        "cliente@email.com",
-        "Tu envío #" + envioGuardado.getId() + " ha sido creado",
-        java.time.LocalDate.now().toString(),
-        "Enviada"
-    );
-    notificacionClient.enviarAlertaEnvio(notificacion);
-
-    return envioGuardado;
-}
 }
