@@ -1,0 +1,190 @@
+NOTIFICACIONES - REEMBOLSOS - REMUNERACIONES
+
+*Para que TODO funcione deben estar corriendo, en este orden:
+   1) MySQL (XAMPP)
+   2) Eureka Server (http://localhost:8761)
+   3) Los 3 microservicios (8090, 8087, 8091)*
+
+
+====================================================================
+NOTIFICACIONES   (puerto 8090)
+====================================================================
+
+Ver notificaciones
+Get - http://localhost:8090/api/v1/notificaciones
+
+--------------------------------------------------------------------
+
+Buscar notificacion por id
+Get - http://localhost:8090/api/v1/notificaciones/{id}
+
+--------------------------------------------------------------------
+
+Buscar notificaciones por cliente
+Get - http://localhost:8090/api/v1/notificaciones/cliente/{clienteId}
+
+--------------------------------------------------------------------
+
+Crear notificacion
+Post - http://localhost:8090/api/v1/notificaciones
+
+{
+    "clienteId": 1,
+    "tipo": "COMPRA",
+    "mensaje": "Tu compra fue procesada"
+}
+
+--------------------------------------------------------------------
+
+Marcar notificacion como leida
+Put - http://localhost:8090/api/v1/notificaciones/{id}/leida
+
+--------------------------------------------------------------------
+
+Borrar notificacion
+Delete - http://localhost:8090/api/v1/notificaciones/{id}
+
+
+====================================================================
+REEMBOLSOS   (puerto 8087)
+====================================================================
+
+*OJO: el POST (crear) necesita el microservicio COMPRA corriendo en
+ http://localhost:8084 para validar la compra. Sin Compras, da error.
+ Los demas metodos funcionan solos.*
+
+Ver reembolsos
+Get - http://localhost:8087/api/v1/reembolsos
+
+--------------------------------------------------------------------
+
+Buscar reembolso por id
+Get - http://localhost:8087/api/v1/reembolsos/{id}
+
+--------------------------------------------------------------------
+
+Buscar reembolsos por estado   (Pendiente / Aprobado / Rechazado)
+Get - http://localhost:8087/api/v1/reembolsos/estado/Aprobado
+
+--------------------------------------------------------------------
+
+Ver dto de reembolso
+Get - http://localhost:8087/api/v1/reembolsos/dto/{id}
+
+--------------------------------------------------------------------
+
+Crear reembolso   (necesita servicio Compras en 8084)
+Post - http://localhost:8087/api/v1/reembolsos
+
+{
+    "idCompra": 1,
+    "nombreReembolso": "Reembolso producto",
+    "monto": 15000,
+    "fecha": "2024-05-01",
+    "estado": "Pendiente",
+    "descripcion": "Producto defectuoso"
+}
+
+--------------------------------------------------------------------
+
+Actualizar reembolso
+Put - http://localhost:8087/api/v1/reembolsos/{id}
+
+{
+    "idCompra": 1,
+    "nombreReembolso": "Reembolso actualizado",
+    "monto": 25000,
+    "fecha": "2024-05-10",
+    "estado": "Aprobado",
+    "descripcion": "Aprobado por el area"
+}
+
+--------------------------------------------------------------------
+
+Eliminar reembolso
+Delete - http://localhost:8087/api/v1/reembolsos/{id}
+
+
+====================================================================
+REMUNERACIONES   (puerto 8091)
+====================================================================
+
+*Al crear o pagar, este servicio le envia una NOTIFICACION a
+ Notificaciones a traves de Eureka (Feign). Por eso Notificaciones
+ debe estar corriendo para ver esa parte.*
+
+Ver remuneraciones
+Get - http://localhost:8091/api/v1/remuneraciones
+
+--------------------------------------------------------------------
+
+Buscar remuneracion por id
+Get - http://localhost:8091/api/v1/remuneraciones/{id}
+
+--------------------------------------------------------------------
+
+Buscar por estado   (PENDIENTE / PAGADO)
+Get - http://localhost:8091/api/v1/remuneraciones/estado/PAGADO
+
+--------------------------------------------------------------------
+
+Buscar por empleado (por nombre)
+Get - http://localhost:8091/api/v1/remuneraciones/empleado/Ana
+
+--------------------------------------------------------------------
+
+Ver dto de remuneracion
+Get - http://localhost:8091/api/v1/remuneraciones/dto/{id}
+
+--------------------------------------------------------------------
+
+Crear remuneracion   (dispara notificacion via Eureka)
+Post - http://localhost:8091/api/v1/remuneraciones
+
+{
+    "nombreEmpleado": "Ana Perez",
+    "salarioBase": 900000,
+    "bonificacion": 50000,
+    "descuentos": 20000,
+    "fechaPago": "2026-06-30",
+    "estado": "PENDIENTE",
+    "descripcion": "Sueldo junio"
+}
+
+--------------------------------------------------------------------
+
+Actualizar remuneracion
+Put - http://localhost:8091/api/v1/remuneraciones/{id}
+
+{
+    "nombreEmpleado": "Ana Perez",
+    "salarioBase": 950000,
+    "bonificacion": 70000,
+    "descuentos": 20000,
+    "fechaPago": "2026-07-30",
+    "estado": "PENDIENTE",
+    "descripcion": "Ajuste de sueldo"
+}
+
+--------------------------------------------------------------------
+
+Pagar remuneracion   (cambia estado a PAGADO y dispara notificacion)
+Put - http://localhost:8091/api/v1/remuneraciones/{id}/pagar
+
+--------------------------------------------------------------------
+
+Eliminar remuneracion
+Delete - http://localhost:8091/api/v1/remuneraciones/{id}
+
+
+====================================================================
+DEMO ENTRE MICROSERVICIOS (vale puntos en el examen)
+====================================================================
+
+1) POST en Remuneraciones (crear una remuneracion).
+2) GET en Notificaciones:
+   Get - http://localhost:8090/api/v1/notificaciones
+3) Apareceran notificaciones nuevas tipo "REMUNERACION_CREADA" y
+   "PAGO_PROCESADO" que Remuneraciones creo automaticamente llamando
+   a Notificaciones por Eureka. Eso demuestra los microservicios
+   comunicandose entre si.
