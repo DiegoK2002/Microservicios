@@ -17,9 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 import cl.duoc.Remuneraciones.dto.RemuneracionDTO;
 import cl.duoc.Remuneraciones.model.Remuneracion;
 import cl.duoc.Remuneraciones.service.RemuneracionService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/remuneraciones")
+@Tag(name = "Remuneraciones", description = "Operaciones sobre las remuneraciones")
 public class RemuneracionController {
 
     @Autowired
@@ -27,6 +32,7 @@ public class RemuneracionController {
 
     // GET /api/v1/remuneraciones
     @GetMapping
+    @Operation(summary = "Retona la lista completa de remuneraciones")
     public ResponseEntity<List<Remuneracion>> listar() {
         List<Remuneracion> lista = service.listarTodas();
         if (lista.isEmpty()) {
@@ -37,6 +43,11 @@ public class RemuneracionController {
 
     // GET /api/v1/remuneraciones/{id}
     @GetMapping("/{id}")
+    @Operation(summary = "Retona una remuneración mediante ID", description = "Retorna una remuneración mediante un ID proporcionado")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Remuneración encontrado"),
+                            @ApiResponse(responseCode = "404", description = "Remuneración no encontrado"),
+                            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<Remuneracion> buscarPorId(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(service.buscarPorId(id));
@@ -47,6 +58,11 @@ public class RemuneracionController {
 
     // GET /api/v1/remuneraciones/estado/{estado}
     @GetMapping("/estado/{estado}")
+    @Operation(summary = "Retona una remuneración mediante su estado", description = "Retorna una remuneración mediante un estado proporcionado")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Remuneración encontrado"),
+                            @ApiResponse(responseCode = "404", description = "Remuneración no encontrado"),
+                            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<List<Remuneracion>> buscarPorEstado(@PathVariable String estado) {
         try {
             List<Remuneracion> lista = service.buscarPorEstado(estado);
@@ -61,6 +77,11 @@ public class RemuneracionController {
 
     // GET /api/v1/remuneraciones/empleado/{nombre}
     @GetMapping("/empleado/{nombre}")
+    @Operation(summary = "Retona una remuneración mediante un empleado", description = "Retorna una remuneración mediante un nombre de empleado proporcionado")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Remuneración encontrado"),
+                            @ApiResponse(responseCode = "404", description = "Remuneración no encontrado"),
+                            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<List<Remuneracion>> buscarPorEmpleado(@PathVariable String nombre) {
         try {
             List<Remuneracion> lista = service.buscarPorNombreEmpleado(nombre);
@@ -75,6 +96,11 @@ public class RemuneracionController {
 
     // GET /api/v1/remuneraciones/dto/{id}
     @GetMapping("/dto/{id}")
+    @Operation(summary = "Retona una remuneración DTO mediante ID", description = "Retorna una remuneración DTO mediante un ID proporcionado")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Remuneración encontrado"),
+                            @ApiResponse(responseCode = "404", description = "Remuneración no encontrado"),
+                            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<RemuneracionDTO> obtenerDTO(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(service.toDTO(service.buscarPorId(id)));
@@ -85,6 +111,7 @@ public class RemuneracionController {
 
     // POST /api/v1/remuneraciones
     @PostMapping
+    @Operation(summary = "Registra una remuneración", description = "Registra una remuneración en el sistema")
     public ResponseEntity<?> crear(@RequestBody Remuneracion remuneracion) {
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(service.crear(remuneracion));
@@ -95,6 +122,7 @@ public class RemuneracionController {
 
     // PUT /api/v1/remuneraciones/{id}
     @PutMapping("/{id}")
+    @Operation(summary = "Actualiza la información de una remuneración")
     public ResponseEntity<?> actualizar(@PathVariable Integer id,
                                                 @RequestBody Remuneracion remuneracion) {
         try {
@@ -106,6 +134,7 @@ public class RemuneracionController {
 
     // PUT /api/v1/remuneraciones/{id}/pagar
     @PutMapping("/{id}/pagar")
+    @Operation(summary = "Paga su remurecación a un empleado")
     public ResponseEntity<?> pagar(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(service.pagar(id));
@@ -116,6 +145,7 @@ public class RemuneracionController {
 
     // DELETE /api/v1/remuneraciones/{id}
     @DeleteMapping("/{id}")
+    @Operation(summary = "Elimina una remuneración", description = "Elimina una remuneración del sistema")
     public ResponseEntity<?> eliminar(@PathVariable Integer id) {
         try {
             service.eliminar(id);
