@@ -1,0 +1,4 @@
+mvn spring-boot:run
+
+cd C:\Users\joaqu\Downloads\Notificaciones\Notificaciones
+mvn spring-boot:run
