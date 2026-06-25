@@ -1,21 +1,90 @@
-En caso no sepan, para usar un repositorio les recomiendo Github Desktop es más facil que usar los comandos en consola.
+Descripción del proyecto:
+La sociedad de tiendas "El FrikiFrikon" son un conjunto de tiendas las cuales se dedican a la venta de artículos "geek" la cual en los últimos meses ha tenido 
+pocas ventas y no se han actualizado en mucho tiempo, por lo que a nuestro equipo se nos han encargado la tarea de crear un sitio web de ventas al estilo 
+"Marketplace" o "Mercado Libre".
 
-Para iniciar tienen que clonar el repositorio.
+Nombres de los integrandes:
+- Harol Sarmiento
+- Diego Kohle
+- Joaquín Dupre
 
-Tienen que darle a <>Code (El boton verde) y abrir en Github Desktop y elegir la carpeta donde van a trabajar.
-Se les va a crear la carpeta "microservicios" que es la del repositorio.
+Listado de microservicios:
+- Login
+- Usuario
+- Producto
+- Compra
+- Reseñas
+- Envio
+- Reembolsos
+- Notificaciones
+- Reportes
+- Remuneraciones
+Rutas principales del Gateway:
+id: Login
+uri: lb://Login
+predicates:
+Path=/api/v1/login, /api/v1/register, /api/v1/roles/**
 
-Dentro de microservicios tienen que poner su microservicio pero dentro de una carpeta.
+id: Usuario
+uri: lb://Usuario
+predicates:
+Path=/api/v1/usuarios/**
 
-Por ejemplo: Microservicios -> Doctor -> Su microservicio
+id: Producto
+uri: lb://Producto
+predicates:
+Path=/api/v1/productos/**
 
-Cuando esté hecho su microservicio para guardarlo en github tienen que ponerle un nombre al commit en Github Desktop y darle a commit. (Esto es como una "foto")
+id: dbCompra
+uri: lb://dbCompra
+predicates:
+Path=/api/v1/compras/**
 
-Cuando hagan el commit les va a salir "Push Origin", eso va a mandar lo que hayan hecho a Github. Todos los cambios.
+id: dbResenas
+uri: lb://dbResenas
+predicates:
+Path=/api/v1/resenas/**
 
-Si no quieren que se hagan cambios en Github de un archivo le dan click derecho sobre el que quieran y "Descartar cambios", eso va a devolver el archivo a la version
-que está en github.
+id: dbEnvio
+uri: lb://dbEnvio
+predicates:
+Path=/api/v1/envios/**
 
-Pueden trabajar en branches si quieren si no están seguros de trabajar en el main. Solo denle click a "Current branch" -> "New Branch" -> le ponen un nombre -> "Create Branch" y finalmente "Publish branch", eso va a mandar la rama a Github.
+id: Reembolsos
+uri: lb://Reembolsos
+predicates:
+Path=/api/v1/reembolsos/**
 
-Luego las ramas se pueden fusionar con el main así que por eso no hay problema.
+id: Notificaciones
+uri: lb://Notificaciones
+predicates:
+Path=/api/v1/notificaciones/**
+
+id: dbReportes
+uri: lb://dbReportes
+predicates:
+Path=/api/v1/reportes/**
+
+id: Remuneraciones
+uri: lb://Remuneraciones
+predicates:
+Path=/api/v1/remuneraciones/**
+
+Enlaces de documentación Swagger:
+http://localhost:8081/swagger-ui/index.html
+http://localhost:8082/swagger-ui/index.html
+http://localhost:8083/swagger-ui/index.html
+http://localhost:8084/swagger-ui/index.html
+http://localhost:8085/swagger-ui/index.html
+http://localhost:8086/swagger-ui/index.html
+http://localhost:8087/swagger-ui/index.html
+http://localhost:8088/swagger-ui/index.html
+http://localhost:8089/swagger-ui/index.html
+http://localhost:8090/swagger-ui/index.html
+
+Instrucciones basicas de ejecución:
+1) Abra en Visual Studio Code o en su editor de confianza los microservicios, el cliente de eureka y el gateway.
+2) Abra Xampp y ingrese a la base de datos.
+3) Cree la base de datos de los microservicios (excepto el cliente de eureka y el gateway).
+4) Primero ponga a correr el cliente de eureka y el gateway y despues el resto de microservicios
+5) Abra Postman y siga las rutas de los controllers para poder ejecutar los Endpoints de los microservicios
