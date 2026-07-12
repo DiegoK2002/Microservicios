@@ -14,6 +14,6 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("Microservicio de Remuneraciones")
                         .description("API REST para la gestión de remuneraciones")
-                        .version("v1"));
+                        .version("v3"));
     }
 }
