@@ -14,6 +14,6 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("Microservicio de Reembolsos")
                         .description("API REST para la gestión de reembolsos")
-                        .version("v1"));
+                        .version("v3"));
     }
 }
