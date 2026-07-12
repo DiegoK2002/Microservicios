@@ -14,6 +14,6 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("Microservicio de Notificaciones")
                         .description("API REST para la gestión de notificaciones - El FrikiFrikón")
-                        .version("v1"));
+                        .version("v3"));
     }
 }
